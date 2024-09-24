@@ -25,7 +25,7 @@ jobs:
     - name: Build the application
       run: ./mvnw clean package
 
-  # Job 2: Build and push Docker image
+  # Job 2: Build and push Docker image to Azure Container Registry
   job2:
     needs: job1
     runs-on: ubuntu-latest
@@ -34,11 +34,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      
+    - name: Log in to Azure Container Registry
+      run: echo "${{ secrets.ACR_PASSWORD }}" | docker login brightstraining24fall.azurecr.io -u "${{ secrets.ACR_USERNAME }}" --password-stdin
+
     - name: Build Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/rest-bookstore-service:latest .
-      
-    - name: Push Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/rest-bookstore-service:latest
+      run: |
+        VERSION_TAG=$(date +'%Y%m%d%H%M%S')  # Generate a unique version tag based on the current timestamp
+        docker build -t brightstraining24fall.azurecr.io/rest-bookstore-service:$VERSION_TAG .
+
+    - name: Push Docker image to Azure Container Registry
+      run: |
+        VERSION_TAG=$(date +'%Y%m%d%H%M%S')  # Use the same version tag for pushing
+        docker push brightstraining24fall.azurecr.io/rest-bookstore-service:$VERSION_TAG
