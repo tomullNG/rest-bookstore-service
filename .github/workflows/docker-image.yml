@@ -32,12 +32,14 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
-    - name: Set up JDK 17  # For Java projects
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
+        distribution: 'temurin'
         java-version: '17'
 
     - name: Hello World build step
-      run: echo "Hello, World! The build pipeline is running!"
+      run: echo "Hello, World! The build pipeline is running on JDK 17!"
+
