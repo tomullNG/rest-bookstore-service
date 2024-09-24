@@ -43,6 +43,10 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    # Add this step to fix permission issue with mvnw
+    - name: Grant execution permission for Maven wrapper
+      run: chmod +x ./mvnw
+
     - name: Build the application
       run: ./mvnw clean package  # Or './gradlew build' if you're using Gradle
 
