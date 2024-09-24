@@ -1,30 +1,33 @@
-#name: Docker Image CI
+#name: Hello World Build Pipeline
 
-#on:
+# Trigger the workflow on any commit to any branch
+#on: 
 #  push:
 #    branches: [ "master" ]
 #  pull_request:
 #    branches: [ "master" ]
 
 #jobs:
-
 #  build:
-
 #    runs-on: ubuntu-latest
 
 #    steps:
-#    - uses: actions/checkout@v4
-#    - name: Build the Docker image
-#      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+#    - name: Checkout code
+#      uses: actions/checkout@v3
 
-name: Hello World Build Pipeline
+#    - name: Set up JDK 17
+#      uses: actions/setup-java@v4
+#      with:
+#        distribution: 'temurin'
+#        java-version: '17'
+
+#    - name: Hello World build step
+#      run: echo "Hello, World! The build pipeline is running on JDK 17!"
+
+name: Build and Dockerize Java API
 
 # Trigger the workflow on any commit to any branch
-on: 
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push]
 
 jobs:
   build:
@@ -40,6 +43,15 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Hello World build step
-      run: echo "Hello, World! The build pipeline is running on JDK 17!"
+    - name: Build the application
+      run: ./mvnw clean package  # Or './gradlew build' if you're using Gradle
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    
+    - name: Build Docker image
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/rest-bookstore-service:latest .
+    
+    - name: Push Docker image to Docker Hub
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/rest-bookstore-service:latest
 
