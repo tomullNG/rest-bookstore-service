@@ -44,11 +44,8 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
   
-    - name: Grant execution permission for Maven wrapper
-      run: chmod +x ./mvnw
-  
     - name: Build the application
-      run: ./mvnw clean package  # Or './gradlew build' if you're using Gradle
+      run: ./mvnw clean package
 
   # Job 2: Build and push Docker image
   job2:
