@@ -25,6 +25,10 @@ jobs:
     - name: Build the application
       run: ./mvnw clean package
 
+      # Step to run tests
+    - name: Run tests
+      run: ./mvnw test  # This will execute the tests
+
   # Job 2: Build and push Docker image to Azure Container Registry
   job2:
     needs: job1
