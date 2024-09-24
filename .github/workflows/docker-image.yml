@@ -1,0 +1,43 @@
+#name: Docker Image CI
+
+#on:
+#  push:
+#    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
+
+#jobs:
+
+#  build:
+
+#    runs-on: ubuntu-latest
+
+#    steps:
+#    - uses: actions/checkout@v4
+#    - name: Build the Docker image
+#      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+name: Hello World Build Pipeline
+
+# Trigger the workflow on any commit to any branch
+on: 
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17  # For Java projects
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+
+    - name: Hello World build step
+      run: echo "Hello, World! The build pipeline is running!"
