@@ -9,6 +9,9 @@ COPY pom.xml mvnw ./
 COPY .mvn .mvn
 COPY src src
 
+# Grant execute permissions to the Maven wrapper
+RUN chmod +x ./mvnw
+
 # Build the application
 RUN ./mvnw clean package -DskipTests
 
